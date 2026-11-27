@@ -459,6 +459,7 @@ Reports and logs:
 - `docs/a35-firmware-comparison.md`
 - `docs/unresolved-issues.md`
 - `docs/final-technical-report.md`
+- `docs/october-vulnerability-analysis.md`
 - `RESEARCH_LOG.md`
 
 Tests: `python -m unittest discover -s tests`.
