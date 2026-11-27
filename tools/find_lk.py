@@ -54,11 +54,11 @@ def main(path):
     step("compressed output block",  lambda: resolve.comp_output(data))
     step("Odin setter/reply",        lambda: resolve.send_info(data, lo, hi))
     step("screen printf/cursor",     lambda: resolve.screen_fns(data))
-    step("blk_bread",  lambda: resolve.named_fn(data, b"blk_bread", 168))
-    step("blk_bwrite", lambda: resolve.named_fn(data, b"blk_bwrite", 176))
+    step("blk_bread",  lambda: resolve.named_fn(data, b"blk_bread"))
+    step("blk_bwrite", lambda: resolve.named_fn(data, b"blk_bwrite"))
     step("em_crypto_sha256", lambda: resolve.sha256_fn(data))
     try:
-        bread = resolve.named_fn(data, b"blk_bread", 168)
+        bread = resolve.named_fn(data, b"blk_bread")[0]
         step("blk shift", lambda: resolve.io_shift(data, bread))
     except Exception as e:
         results.append(("blk shift", "SKIP", str(e)))

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Firmware / binaries (never commit)
+*.bin
+*.lz4
+*.tar
+*.tar.md5
+*.tar.gz
+*.zip
+sboot*
+BL_*
+BL*/
+work/*.bin
+
+# OS
+.DS_Store
+Thumbs.db
