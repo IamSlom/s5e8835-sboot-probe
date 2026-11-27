@@ -34,8 +34,14 @@ rather than confirmed heuristic matches.
 | `s5e8835` markers | 0x5e43, 0x26ee28, 0x4f125f | 0x5e43, 0x27700e, 0x4f125f | middle moved +0x81e6 |
 | PAR buffer | 0xce800000/0x7e00000/0x1e00000 | same | no |
 | IN buffer | 0x890010000/0x8000000/0x2000000 | same | no |
-| blk_bread address | not captured | 0xf4864c60 | n/a (new capture) |
-| blk_bwrite address | not captured | 0xf4864d5c | n/a |
+| blk_bread address (PAC-aware) | 0xf48479ac | 0xf4847b9c | yes (+0x1f0) |
+| blk_bwrite address (PAC-aware) | 0xf4847ba8 | 0xf4847d98 | yes (+0x1f0) |
+| sha256 wrapper | 0xf48657cc | 0xf4865a4c | yes (+0x280) |
+| screen_printf | 0xf484c998 | 0xf484c998 | no |
+| cursor fallback (stub) | 0xf48168e8 | 0xf48168e8 | no (still a stub) |
+| display-update fallback (stub) | 0xf4801e54 | 0xf4801e54 | no (still a stub) |
+| reply (Odin) | 0xf4f1c9a8 | 0xf4f1c9a8 | no |
+| default send | 0xf480f30c | 0xf480f30c | no |
 | sha256 wrapper | not captured for A35 | 0xf4865a4c | n/a |
 | screen printf | not captured | 0xf484c998 | n/a |
 | reply (Odin) | not captured | 0xf4f1c9a8 | n/a |
@@ -71,14 +77,14 @@ November (this fork, EZJ2-adapted resolver): 9/9 PASS, but with confidence split
    unblocks the "November-2026+ BL diff" item partially, but a true October binary
    is still needed for a direct diff. The October values above are documentary.
 
-## Missing inputs
+## Inputs (now available)
 
-- October A35 binary (A356EXXSBDZH1) is not available locally. Only the November
-  build (A356EXXUBEZJ2) is present. A direct byte-level diff of the LK slice
-  between October and November could not be performed; comparison is limited to
-  documented October values.
-- A35 block-wrapper addresses and full nine-row table for October were never
-  captured (Yuki docs note this gap).
+- October A35 binary (A356EXXSBDZH1) was obtained from the official BL package
+  `SAMFW.COM_SM-A356E_KSA_A356EXXSBDZH1_fac.zip` and extracted via
+  `tools/extract_sboot.py`. sha256 verified against Yuki's documented value
+  (`797fcba9...9e37484`). This unblocks the direct comparison above.
+- Block-wrapper addresses for both builds were re-derived with the PAC-aware
+  `tools/blk_wrapper_scan.py`.
 
 ## Reproduction
 

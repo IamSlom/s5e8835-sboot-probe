@@ -10,8 +10,9 @@ Confirmed on the November 2026 build (A356EXXUBEZJ2, sha256
 - Download buffers identical to s5e8825:
   PAR `0xce800000/0x7e00000/0x1e00000`, IN `0x890010000/0x8000000/0x2000000`.
 - Slot size lives in `w10` (not `w9`); `w9` carries `0x40`.
-- Block wrappers `blk_bread` @ `0xf4864c60`, `blk_bwrite` @ `0xf4864d5c`
-  (non-PAC prologue).
+- Block wrappers (PAC-aware): `blk_bread` @ `0xf4847b9c` (Nov) / `0xf48479ac` (Oct),
+  `blk_bwrite` @ `0xf4847d98` (Nov) / `0xf4847ba8` (Oct). Both are PAC-built;
+  the upstream `named_fn()` non-PAC heuristic is unreliable on these builds.
 - SHA-256 wrapper @ `0xf4865a4c`.
 - LK is PAC-built.
 - Embedded ELF64 (AArch64) objects at `0x2a8928` and `0x2af008`.
@@ -40,7 +41,9 @@ BSS and middle marker differ. Consistent with linker variation, not protocol cha
 
 - BSS range: `0xf4c3c000..0xf5079908` -> `0xf4c44000..0xf5087270`.
 - Middle `s5e8835` marker: `0x26ee28` -> `0x27700e` (+0x81e6).
-- Wrapper/heuristic addresses differ (November captures new addresses).
+- Wrapper addresses shifted by +0x1f0 (blk_bread/bwrite) and +0x280 (sha256)
+  between October and November; screen_printf, reply, default send, and
+  download buffers are unchanged.
 - November resolves more rows under the EZJ2-adapted resolver, but several are
   fallbacks, not newly confirmed heuristic matches. See compatibility matrix.
 
@@ -58,8 +61,9 @@ BSS and middle marker differ. Consistent with linker variation, not protocol cha
 1. Independent (non-fallback) confirmation of comp_output, send_info, sha256,
    screen, blk shift on at least two builds.
 2. PAC-aware prologue matcher validated against multiple builds.
-3. October A35 binary for a direct diff.
-4. s5e8825 regression re-run with available firmware.
+3. s5e8825 regression re-run (no firmware available here).
+4. PAC-aware re-implementation of named_fn() in the resolver (currently only
+   available as the separate blk_wrapper_scan.py tool).
 5. Hardware validation is explicitly excluded: the chain ends in an irreversible
    KEY2 fuse and there is no dry run. Static analysis cannot validate the fuse
    path, USB protocol, loader, or post-fuse boot.

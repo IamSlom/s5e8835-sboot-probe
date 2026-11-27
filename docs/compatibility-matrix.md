@@ -57,8 +57,8 @@ Identical to s5e8825 ground truth on both builds.
 
 | Item | November (A356EXXUBEZJ2) | Status |
 |---|---|---|
-| `blk_bread` address | 0xf4864c60 | CONFIRMED (resolver, non-PAC prologue) |
-| `blk_bwrite` address | 0xf4864d5c | CONFIRMED |
+| `blk_bread` address (PAC-aware) | Oct: 0xf48479ac / Nov: 0xf4847b9c | CONFIRMED (real PAC function starts; upstream named_fn reported 4 bytes later and is unreliable on PAC builds) |
+| `blk_bwrite` address (PAC-aware) | Oct: 0xf4847ba8 / Nov: 0xf4847d98 | CONFIRMED |
 | vtable offsets | 168 / 176 | CONFIRMED |
 | Prologue | non-PAC (fd7b bda9 ...) | CONFIRMED |
 

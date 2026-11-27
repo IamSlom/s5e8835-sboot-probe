@@ -66,12 +66,11 @@ Confidence labels: high / medium / low.
 
 ## U6. October vs November direct diff
 
-- Location: docs/a35-firmware-comparison.md.
-- Missing: October A35 binary (A356EXXSBDZH1) locally. Comparison is
-  documentary only.
-- Evidence: October values from Yuki docs.
-- Status: BLOCKED on input.
-- Next: obtain and hash-verify the October build; run firmware_compare.py.
+- Status: RESOLVED (input now available).
+- October binary obtained from official BL package and hash-verified
+  (797fcba9...9e37484). Direct comparison performed; see
+  docs/a35-firmware-comparison.md. Remaining: byte-level diff of non-LK
+  sections and deeper function-level diff.
 
 ## U7. A53 regression (s5e8825)
 
@@ -99,7 +98,21 @@ Confidence labels: high / medium / low.
 - Status: OUT OF SCOPE for this fork (no signing/redistribution here).
 - Note: this fork does not contain signing code or firmware.
 
-## U10. Synthetic coverage
+## U10. named_fn() blk wrapper resolution is unreliable on PAC builds
+
+- Location: upstream `resolve.py` `named_fn()` (non-PAC prologue matcher).
+- Missing: PAC-aware wrapper resolution. The classic prologue words
+  (`fd7b bda9 f657 01a9 f44f 02a9 fd03 0091`) occur immediately after
+  `pacibsp` on these builds, so the upstream scan returns an address 4 bytes
+  past the real function start (and may match PAC functions, not true wrappers).
+- Evidence: October/November blk_bread and blk_bwrite real starts are
+  `0xf48479ac`/`0xf4847b9c` and `0xf4847ba8`/`0xf4847d98` (pacibsp),
+  4 bytes before the upstream-reported values.
+- Status: CONTRADICTED (upstream heuristic).
+- Mitigation: `tools/blk_wrapper_scan.py` implements the PAC-aware scan.
+- Next: port the PAC-aware logic into the resolver itself.
+
+## U11. Synthetic coverage
 
 - Location: tests/.
 - Status: basic tests present; more fixtures needed for resolver heuristics.

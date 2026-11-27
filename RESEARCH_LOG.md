@@ -35,6 +35,27 @@
 - Tests: unittest suite green.
 - Remaining: validate fallback constants via disassembly.
 
+## 2026-11-27 — October firmware obtained and direct comparison
+
+- Firmware analyzed: C:\Users\Administrator\Downloads\sboot_oct.bin
+  (A356EXXSBDZH1), sha256 `797fcba92b90e6ceadd55ffa6adaea64793c4a378c0dca26efc8ce9f89e37484`,
+  extracted from SAMFW.COM_SM-A356E_KSA_A356EXXSBDZH1_fac.zip via
+  tools/extract_sboot.py; hash verified.
+- Files examined: tools/firmware_compare.py, tools/resolver_analysis.py,
+  tools/prologue_scan.py, tools/blk_wrapper_scan.py (new).
+- Findings:
+  - Direct October vs November comparison completed (see a35-firmware-comparison.md).
+  - blk_bread/bwrite real (PAC) starts: Oct 0xf48479ac/0xf4847ba8,
+    Nov 0xf4847b9c/0xf4847d98.
+  - Upstream named_fn() heuristic is unreliable on PAC builds (off by 4 and
+    may match PAC functions); added PAC-aware blk_wrapper_scan.py.
+  - sha256 wrappers: Oct 0xf48657cc, Nov 0xf4865a4c.
+  - screen_printf identical on both (0xf484c998); cursor/display-update
+    fallbacks are stubs on both.
+- Changes: tools/blk_wrapper_scan.py; updated docs.
+- Tests: 12 passed.
+- Remaining: PAC-aware named_fn in resolver; re-derive cursor/display-update.
+
 ## 2026-11-27 — Disassembly validation of fallback addresses (November)
 
 - Firmware analyzed: same November build (A356EXXUBEZJ2).
