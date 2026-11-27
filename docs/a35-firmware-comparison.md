@@ -3,7 +3,10 @@
 Devices: Samsung Galaxy A35 5G (SM-A356E), SoC s5e8835.
 Builds compared:
 - October: A356EXXSBDZH1 (SPL Oct 2026), sha256 `797fcba9...9e37484` (per Yuki docs; not available locally)
-- November: A356EXXUBEZJ2 (target firmware), sha256 `5a84f29a...02fe3c` (local file `sboot.bin` / `work/sboot_a35bl.bin`)
+- November: A356EXXUBEZJ2 (target firmware), sha256 `5a84f29a...02fe3c`.
+  Provenance: extracted from official BL package
+  `BL_A356EXXUBEZJ2_..._MULTI_CERT.tar.md5` via `tools/extract_sboot.py`
+  (member `sboot.bin.lz4`, lz4-decompressed, hash verified).
 
 Method: static analysis only. October values are taken from Yuki's published
 documentation (findings.md, issue-body.md); November values measured in this fork.
