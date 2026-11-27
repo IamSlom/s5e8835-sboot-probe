@@ -35,6 +35,9 @@ Confidence labels: high / medium / low.
   calibrated reply (0xf4f1c9a8).
 - Evidence: November returns reply=0xf4f1c9a8, callback=0xf4f1c9b8,
   send=0xf480f30c; structural checks pass (callback in BSS, cb_off=0x10).
+  Upstream Odin setter pattern (6-word ADRP/STR sequence) has 0 hits on
+  November (PAC build), so the fallback (call-count heuristic) is the only
+  path; reply/callback are plausible but not independently validated.
 - Status: PARTIAL.
 - Next: map the Odin callback setter layout on November; verify reply buffer
   derivation (currently issue-#13 calibration).
