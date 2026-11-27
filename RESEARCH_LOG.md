@@ -119,3 +119,18 @@
   docs/unresolved-issues.md (U12 setup trigger, U13 transfer sink; U1 wording).
 - Tests: 12 passed.
 - Remaining: U12/U13; port PAC-aware matchers into resolve.py.
+
+## 2026-11-27 — odin_scan tool
+
+- Firmware analyzed: October A356EXXSBDZH1 and EZJ2.
+- Files examined: tools/odin_scan.py (new), tests/test_odin_scan.py (new).
+- Findings:
+  - The scanner reproduces the engine and gate on both builds:
+    Oct engine 0xf4864140, gate 0xf48641bc, skip 0xf48643d4,
+    setup 0xf48640d8, block 0x20000.
+    EZJ2 engine 0xf48643c0, gate 0xf486443c, skip 0xf4864654,
+    setup 0xf4864358, block 0x20000.
+  - Direct engine caller is 0xf480fff0 on both builds.
+- Changes: tools/odin_scan.py, tests/test_odin_scan.py, README.md.
+- Tests: 20 passed.
+- Remaining: U12/U13.

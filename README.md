@@ -450,8 +450,11 @@ This fork adds reproducible, offline-only tooling under `tools/`:
 - `tools/find_lk.py` — nine-row resolver probe (fixed `named_fn` calls).
 - `tools/input_diag.py` — `compressed_download_init` window diagnostic.
 - `tools/blk_wrapper_scan.py` — PAC-aware blk_bread/blk_bwrite resolver.
-- `tools/screen_scan.py` — PAC-aware screen_printf/cursor/display-update resolver.
-- `tools/prologue_scan.py` — PAC vs non-PAC prologue census.
+- `tools/screen_scan.py` - PAC-aware screen_printf/cursor/display-update resolver.
+- `tools/prologue_scan.py` - PAC vs non-PAC prologue census.
+- `tools/odin_scan.py` - locates the Odin engine and decodes the
+  state-conditional bounds check (flags gate, skip/reject targets, setup
+  function, block size).
 
 Reports and logs:
 
