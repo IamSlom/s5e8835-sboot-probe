@@ -60,11 +60,11 @@ Identical to s5e8825 ground truth on both builds.
 | `blk_bread` address (PAC-aware) | Oct: 0xf48479ac / Nov: 0xf4847b9c | CONFIRMED (real PAC function starts; upstream named_fn reported 4 bytes later and is unreliable on PAC builds) |
 | `blk_bwrite` address (PAC-aware) | Oct: 0xf4847ba8 / Nov: 0xf4847d98 | CONFIRMED |
 | vtable offsets | 168 / 176 | CONFIRMED |
-| Prologue | non-PAC (fd7b bda9 ...) | CONFIRMED |
+| Prologue | PAC (`pacibsp` at start; classic `stp` words follow) | CONFIRMED |
 
-October A35 wrapper addresses were not captured in Yuki's docs (UNCONFIRMED for
-October). X510/A26 October-era wrappers documented at 0xf4846b58/0xf4846d54 and
-0xf4845fb8/0xf48461b4.
+October A35 wrapper addresses are now measured: `blk_bread` 0xf48479ac,
+`blk_bwrite` 0xf4847ba8 (both PAC starts). X510/A26 October-era wrappers
+documented at 0xf4846b58/0xf4846d54 and 0xf4845fb8/0xf48461b4.
 
 ## 6. Resolver rows (November, EZJ2-adapted resolver)
 
@@ -91,16 +91,16 @@ easier. Distinguish confirmed matches (high confidence) from fallbacks.
 
 | Item | Status |
 |---|---|
-| LK is PAC-built | CONFIRMED (prologue mismatch; census: 4047 PAC vs 166 non-PAC prologues in November LK) |
-| Block wrappers non-PAC | CONFIRMED |
-| PAC-tolerant prologue matcher | NOT IMPLEMENTED (open work) |
+| LK is PAC-built | CONFIRMED (census: Oct 3958 PAC / 158 non-PAC; Nov 4047 / 166) |
+| Block wrappers PAC-built | CONFIRMED (pacibsp at both October and November starts) |
+| PAC-tolerant prologue matcher | PARTIAL (tools/blk_wrapper_scan.py, tools/screen_scan.py; not in resolve.py) |
 
 ## 8. Embedded objects
 
 | Item | November | Status |
 |---|---|---|
 | Embedded ELF64 (AArch64) count | 2 (offsets 0x2a8928, 0x2af008) | CONFIRMED (measured) |
-| October equivalent | not measured | UNCONFIRMED |
+| October equivalent | 2 (offsets 0x2a03e8, 0x2a6ac8) | CONFIRMED (measured) |
 
 ## 9. SoC-specific assumptions
 
@@ -112,10 +112,12 @@ easier. Distinguish confirmed matches (high confidence) from fallbacks.
 
 ## 10. What remains unknown
 
-- Whether October A35 block-wrapper addresses match November (not captured).
-- Whether PAC prologue matcher can be generalized.
+- Whether the PAC-aware matchers can be folded into `resolve.py` (they exist
+  only in the two standalone tools).
 - Whether comp_output/send_info fallback constants are correct on November
   (they pass structural validation in resolve.py main()).
-- November-vs-October diff of comp_output/send_info internals.
+- The protocol-level trigger that reaches the Odin setup function 0xf48640d8
+  from the packet parser (callers found, command semantics open — U12).
+- Exact sink of the transfer helper 0xf480f390 (USB DMA vs. storage write).
 - A53 regression was validated only for s5e8825; not re-run in this fork
   (no s5e8825 firmware available here).

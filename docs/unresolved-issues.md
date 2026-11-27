@@ -9,8 +9,8 @@ Confidence labels: high / medium / low.
 - Missing: matcher that accepts `pacibsp`/`autibsp`-style prologues instead of
   fixed non-PAC sequences. Current code falls back to hardcoded addresses.
 - Evidence: X510 wrapper reported at 0xf48645ec calling 0xf48bea04; November
-  sha256 resolved to 0xf4865a4c via fallback. Block wrappers (non-PAC) pass,
-  consistent with PAC explanation.
+  sha256 resolved to 0xf4865a4c via fallback. Block wrappers also start with
+  `pacibsp` (confirmed on both builds), consistent with the PAC explanation.
 - Status: PARTIAL (fallbacks present, not validated).
 - Next: implement PAC-aware prologue detection; validate against November image
   and any additional build.
@@ -116,3 +116,29 @@ Confidence labels: high / medium / low.
 - Status: basic tests present; more fixtures needed for resolver heuristics.
 - Next: add synthetic LK slices exercising image_map edge cases and
   bss_candidates false positives.
+
+## U12. Odin setup trigger (state 0x66 reachability)
+
+- Location: October engine `0xf4864140`; setup `0xf48640d8`.
+- Missing: the protocol-level command that calls setup and sets `[0xef0]=1`
+  after a packet with state `0x66` has been parsed. The parser at
+  `0xf4864358` stores state/flags without validating flags, but setup is
+  reached only from `0xf48bb76c` (tail branch) and `0xf48bd8cc` (BL).
+- Evidence: setup stores exact size at `[0xed8]`, aligned size at `[0xee8]`,
+  destination at `[0xf20]`, chunk at `[0xf28]`, block size 0x20000.
+- Status: OPEN (reachability of the skip path is structurally confirmed;
+  the host command sequence that invokes setup is not).
+- Next: decode the two setup callers and map their command strings/handlers.
+
+## U13. Transfer sink of 0xf480f390
+
+- Location: `0xf480f390` → `0xf483b10c` → indirect callback
+  `[0xf4c72000+0xd28]` with `(channel, buffer, length, 0xc0000)`.
+- Missing: whether the callback is a USB DMA receive (device writes into the
+  advanced buffer) or a storage write. The engine's destination pointer
+  advances by `len` and the next transfer is armed at that pointer.
+- Evidence: the interface dispatch at `0xf480fff0` routes received packets to
+  the engine; `0xf480f390` is also used to re-arm a 0x400-byte buffer.
+- Status: OPEN (sink direction not proven).
+- Next: identify the driver that registers `[0xf4c72000+0xd28]` and its
+  endpoint/direction flags.

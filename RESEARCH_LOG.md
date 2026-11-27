@@ -95,3 +95,27 @@
   docs/unresolved-issues.md, docs/final-technical-report.md, RESEARCH_LOG.md.
 - Tests: n/a.
 - Remaining: push fork? (no gh CLI; git push available via credentials).
+
+## 2026-11-27 — October Odin engine bounds-check decode
+
+- Firmware analyzed: October A356EXXSBDZH1 (C:\Users\Administrator\Downloads\sboot_oct.bin),
+  sha256 797fcba9...9e37484.
+- Files examined: sboot_oct.bin; docs/october-vulnerability-analysis.md.
+- Findings:
+  - Odin engine is at 0xf4864140 on October (EZJ2: 0xf48643c0, shift -0x280).
+  - Session context 0xf4c9b000 (EZJ2: 0xf4ca3000, shift -0x8000).
+  - State/flags are taken from the first two words of the 0x400-byte packet
+    (0xf4864358) and stored without flag validation.
+  - State 0x66 + flags with (flags & ~4) != 2 skips the only bounds compare at
+    0xf48641c4; the skip target 0xf48643d4 computes limit - offset and arms the
+    next transfer at the advanced destination pointer.
+  - Setup 0xf48640d8 stores exact size [0xed8], block-aligned size [0xee8],
+    destination [0xf20], chunk [0xf28]; block size is 0x20000.
+  - Setup callers: 0xf48bb76c (tail branch), 0xf48bd8cc (BL).
+  - Transfer helper 0xf480f390 dispatches through [0xf4c72000+0xd28]; exact
+    sink (USB DMA vs storage) not proven.
+- Changes: docs/october-vulnerability-analysis.md (section 4.1);
+  docs/compatibility-matrix.md (PAC wrapper corrections, October ELF offsets);
+  docs/unresolved-issues.md (U12 setup trigger, U13 transfer sink; U1 wording).
+- Tests: 12 passed.
+- Remaining: U12/U13; port PAC-aware matchers into resolve.py.
