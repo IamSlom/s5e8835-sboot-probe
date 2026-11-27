@@ -51,18 +51,13 @@ Confidence labels: high / medium / low.
 
 ## U5. screen cursor / display update
 
-- Location: `resolve.py` `screen_fns()`.
-- Missing: validated cursor and display-update addresses.
-- Evidence (November disassembly):
-  - fallback cursor `0xf48168e8` disassembles to `mov w0, wzr; ret` — a stub,
-    not a real cursor getter.
-  - fallback display-update `0xf4801e54` disassembles to `pacibsp; autibsp; ret`
-    — an empty PAC function, not a real update routine.
-  - screen_printf `0xf484c998` is a real PAC-built function (prologue
-    `pacibsp`).
-- Status: CONTRADICTED (fallbacks are stubs; not usable).
-- Next: re-derive cursor getter and display update from screen_printf callers;
-  implement PAC-aware matcher. Do not use the current fallback values.
+- Status: RESOLVED via `tools/screen_scan.py`.
+- screen_printf (PAC start): Oct 0xf484c7a4 / Nov 0xf484c994 (155-156 callers).
+- cursor getter: Oct 0xf484bdec / Nov 0xf484bfdc (PAC, freq 142-143).
+- display update: 0xf4807c70 on both builds (PAC, freq 26).
+- The old resolver fallbacks (0xf48168e8, 0xf4801e54) are stubs and must not
+  be used; the PAC-aware scan replaces them.
+- Remaining: port the PAC-aware logic into the resolver itself.
 
 ## U6. October vs November direct diff
 

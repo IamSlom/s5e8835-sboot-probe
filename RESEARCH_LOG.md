@@ -35,6 +35,21 @@
 - Tests: unittest suite green.
 - Remaining: validate fallback constants via disassembly.
 
+## 2026-11-27 — PAC-aware screen resolver
+
+- Firmware analyzed: October and November A35 builds.
+- Files examined: tools/screen_scan.py (new).
+- Findings:
+  - screen_printf PAC starts: Oct 0xf484c7a4, Nov 0xf484c994 (155-156 callers).
+  - cursor getter: Oct 0xf484bdec, Nov 0xf484bfdc (freq 142-143).
+  - display update: 0xf4807c70 on both builds (freq 26).
+  - The old resolver fallbacks (0xf48168e8, 0xf4801e54) are stubs and must not
+    be used.
+- Changes: tools/screen_scan.py; updated docs/unresolved-issues.md,
+  compatibility-matrix.md, a35-firmware-comparison.md, final-technical-report.md.
+- Tests: 12 passed.
+- Remaining: port PAC-aware logic into resolve.py.
+
 ## 2026-11-27 — October firmware obtained and direct comparison
 
 - Firmware analyzed: C:\Users\Administrator\Downloads\sboot_oct.bin

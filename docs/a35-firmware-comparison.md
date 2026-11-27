@@ -37,9 +37,9 @@ rather than confirmed heuristic matches.
 | blk_bread address (PAC-aware) | 0xf48479ac | 0xf4847b9c | yes (+0x1f0) |
 | blk_bwrite address (PAC-aware) | 0xf4847ba8 | 0xf4847d98 | yes (+0x1f0) |
 | sha256 wrapper | 0xf48657cc | 0xf4865a4c | yes (+0x280) |
-| screen_printf | 0xf484c998 | 0xf484c998 | no |
-| cursor fallback (stub) | 0xf48168e8 | 0xf48168e8 | no (still a stub) |
-| display-update fallback (stub) | 0xf4801e54 | 0xf4801e54 | no (still a stub) |
+| screen_printf | 0xf484c7a4 | 0xf484c994 | yes (+0x1f0) |
+| screen cursor getter | 0xf484bdec | 0xf484bfdc | yes (+0x1f0) |
+| display update | 0xf4807c70 | 0xf4807c70 | no |
 | reply (Odin) | 0xf4f1c9a8 | 0xf4f1c9a8 | no |
 | default send | 0xf480f30c | 0xf480f30c | no |
 | sha256 wrapper | not captured for A35 | 0xf4865a4c | n/a |

@@ -75,7 +75,9 @@ October). X510/A26 October-era wrappers documented at 0xf4846b58/0xf4846d54 and
 | compressed_download_init | PASS | high | structural |
 | compressed output block | PASS | medium | EZJ2 fallback returns constants; not independently heuristic-validated |
 | Odin setter/reply | PASS | medium | EZJ2 fallback (call-count heuristic); not independently validated |
-| screen printf/cursor | PARTIAL | low | printf 0xf484c998 is real PAC fn; cursor/display-update fallbacks are stubs (mov w0,wzr; ret / empty PAC) — not usable |
+| screen printf | CONFIRMED | medium | Oct 0xf484c7a4 / Nov 0xf484c994 (PAC prologue, 155-156 callers) |
+| screen cursor getter | CONFIRMED | medium | Oct 0xf484bdec / Nov 0xf484bfdc (PAC, freq 142-143) |
+| display update | CONFIRMED | medium | 0xf4807c70 on both builds (PAC, freq 26) |
 | blk_bread | PASS | high | non-PAC prologue |
 | blk_bwrite | PASS | high | non-PAC prologue |
 | em_crypto_sha256 | PASS | medium | EZJ2 fallback returns target without XREF count |

@@ -33,8 +33,9 @@ BSS and middle marker differ. Consistent with linker variation, not protocol cha
 - PAC-tolerant prologue matcher for `screen_fns` and `sha256_fn` (fallbacks only).
 - Independent validation of `comp_output` and `send_info` fallback constants.
 - `io_shift` (returns 12 fallback).
-- `screen` cursor/display-update addresses: the current fallbacks disassemble to
-  stubs (`mov w0, wzr; ret` and an empty PAC function) and are not usable.
+- `screen` row is now validated via `tools/screen_scan.py` (PAC-aware); the old
+  resolver fallbacks are stubs and must not be used. Porting the PAC-aware
+  logic into resolve.py is still open.
 - Direct October-vs-November diff (October binary unavailable).
 
 ## 4. What changed between October and November firmware?

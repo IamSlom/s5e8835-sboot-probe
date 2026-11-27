@@ -449,6 +449,9 @@ This fork adds reproducible, offline-only tooling under `tools/`:
   via `SVE_REPO`) and reports candidate matches with confidence labels.
 - `tools/find_lk.py` — nine-row resolver probe (fixed `named_fn` calls).
 - `tools/input_diag.py` — `compressed_download_init` window diagnostic.
+- `tools/blk_wrapper_scan.py` — PAC-aware blk_bread/blk_bwrite resolver.
+- `tools/screen_scan.py` — PAC-aware screen_printf/cursor/display-update resolver.
+- `tools/prologue_scan.py` — PAC vs non-PAC prologue census.
 
 Reports and logs:
 
