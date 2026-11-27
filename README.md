@@ -439,6 +439,34 @@ See [`docs/safety.md`](docs/safety.md) for the full safety note.
 
 ---
 
+## Research tooling (this fork)
+
+This fork adds reproducible, offline-only tooling under `tools/`:
+
+- `tools/firmware_inspect.py` — binary metadata, markers, LK slice/BSS, embedded ELF.
+- `tools/firmware_compare.py` — structural comparison of two `sboot.bin` images.
+- `tools/resolver_analysis.py` — runs resolver heuristics (if `resolve.py` available
+  via `SVE_REPO`) and reports candidate matches with confidence labels.
+- `tools/find_lk.py` — nine-row resolver probe (fixed `named_fn` calls).
+- `tools/input_diag.py` — `compressed_download_init` window diagnostic.
+- `tools/blk_wrapper_scan.py` — PAC-aware blk_bread/blk_bwrite resolver.
+- `tools/screen_scan.py` - PAC-aware screen_printf/cursor/display-update resolver.
+- `tools/prologue_scan.py` - PAC vs non-PAC prologue census.
+- `tools/odin_scan.py` - locates the Odin engine and decodes the
+  state-conditional bounds check (flags gate, skip/reject targets, setup
+  function, block size).
+
+Reports and logs:
+
+- `docs/compatibility-matrix.md`
+- `docs/a35-firmware-comparison.md`
+- `docs/unresolved-issues.md`
+- `docs/final-technical-report.md`
+- `docs/october-vulnerability-analysis.md`
+- `RESEARCH_LOG.md`
+
+Tests: `python -m unittest discover -s tests`.
+
 ## Credits and references
 
 This work builds directly on the public research below. The upstream project
