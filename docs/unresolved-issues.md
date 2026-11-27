@@ -52,12 +52,17 @@ Confidence labels: high / medium / low.
 ## U5. screen cursor / display update
 
 - Location: `resolve.py` `screen_fns()`.
-- Missing: validated cursor and display-update addresses. Fallbacks are
-  unverified (0xf48168e8, 0xf4801e54).
-- Evidence: none beyond fallback.
-- Status: UNCONFIRMED.
-- Next: disassembly of screen_printf callers; identify cursor getter and
-  display update on November.
+- Missing: validated cursor and display-update addresses.
+- Evidence (November disassembly):
+  - fallback cursor `0xf48168e8` disassembles to `mov w0, wzr; ret` — a stub,
+    not a real cursor getter.
+  - fallback display-update `0xf4801e54` disassembles to `pacibsp; autibsp; ret`
+    — an empty PAC function, not a real update routine.
+  - screen_printf `0xf484c998` is a real PAC-built function (prologue
+    `pacibsp`).
+- Status: CONTRADICTED (fallbacks are stubs; not usable).
+- Next: re-derive cursor getter and display update from screen_printf callers;
+  implement PAC-aware matcher. Do not use the current fallback values.
 
 ## U6. October vs November direct diff
 

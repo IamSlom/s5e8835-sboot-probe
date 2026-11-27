@@ -35,6 +35,21 @@
 - Tests: unittest suite green.
 - Remaining: validate fallback constants via disassembly.
 
+## 2026-11-27 — Disassembly validation of fallback addresses (November)
+
+- Firmware analyzed: same November build (A356EXXUBEZJ2).
+- Files examined: work/disasm.py (original), tools/prologue_scan.py (new).
+- Findings:
+  - screen_printf @ 0xf484c998 is a real PAC-built function (prologue pacibsp).
+  - fallback cursor 0xf48168e8 disassembles to `mov w0, wzr; ret` (stub) — NOT usable.
+  - fallback display-update 0xf4801e54 is an empty PAC function — NOT usable.
+  - sha256 wrapper 0xf4865a4c and default send 0xf480f30c are real PAC functions.
+  - LK prologue census: 4047 PAC vs 166 non-PAC.
+- Changes: tools/prologue_scan.py, tests/test_prologue_scan.py;
+  updated unresolved-issues.md, compatibility-matrix.md, final-technical-report.md.
+- Tests: 12 passed.
+- Remaining: re-derive cursor/display-update from screen_printf callers.
+
 ## 2026-11-27 — Documentation
 
 - Firmware analyzed: n/a (docs).

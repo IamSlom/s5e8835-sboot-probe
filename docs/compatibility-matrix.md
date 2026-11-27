@@ -75,7 +75,7 @@ October). X510/A26 October-era wrappers documented at 0xf4846b58/0xf4846d54 and
 | compressed_download_init | PASS | high | structural |
 | compressed output block | PASS | medium | EZJ2 fallback returns constants; not independently heuristic-validated |
 | Odin setter/reply | PASS | medium | EZJ2 fallback (call-count heuristic); not independently validated |
-| screen printf/cursor | PASS | low | fallback addresses (0xf48168e8, 0xf484c998, 0xf4801e54); PAC mismatch |
+| screen printf/cursor | PARTIAL | low | printf 0xf484c998 is real PAC fn; cursor/display-update fallbacks are stubs (mov w0,wzr; ret / empty PAC) — not usable |
 | blk_bread | PASS | high | non-PAC prologue |
 | blk_bwrite | PASS | high | non-PAC prologue |
 | em_crypto_sha256 | PASS | medium | EZJ2 fallback returns target without XREF count |
@@ -89,7 +89,7 @@ easier. Distinguish confirmed matches (high confidence) from fallbacks.
 
 | Item | Status |
 |---|---|
-| LK is PAC-built | CONFIRMED (prologue mismatch for screen/sha256) |
+| LK is PAC-built | CONFIRMED (prologue mismatch; census: 4047 PAC vs 166 non-PAC prologues in November LK) |
 | Block wrappers non-PAC | CONFIRMED |
 | PAC-tolerant prologue matcher | NOT IMPLEMENTED (open work) |
 
