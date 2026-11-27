@@ -439,6 +439,27 @@ See [`docs/safety.md`](docs/safety.md) for the full safety note.
 
 ---
 
+## Research tooling (this fork)
+
+This fork adds reproducible, offline-only tooling under `tools/`:
+
+- `tools/firmware_inspect.py` — binary metadata, markers, LK slice/BSS, embedded ELF.
+- `tools/firmware_compare.py` — structural comparison of two `sboot.bin` images.
+- `tools/resolver_analysis.py` — runs resolver heuristics (if `resolve.py` available
+  via `SVE_REPO`) and reports candidate matches with confidence labels.
+- `tools/find_lk.py` — nine-row resolver probe (fixed `named_fn` calls).
+- `tools/input_diag.py` — `compressed_download_init` window diagnostic.
+
+Reports and logs:
+
+- `docs/compatibility-matrix.md`
+- `docs/a35-firmware-comparison.md`
+- `docs/unresolved-issues.md`
+- `docs/final-technical-report.md`
+- `RESEARCH_LOG.md`
+
+Tests: `python -m unittest discover -s tests`.
+
 ## Credits and references
 
 This work builds directly on the public research below. The upstream project

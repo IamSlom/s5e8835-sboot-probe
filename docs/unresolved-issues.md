@@ -1,0 +1,102 @@
+# Unresolved issues (Exynos 1380 / s5e8835)
+
+Each item: location, what is missing, available evidence, status, next step.
+Confidence labels: high / medium / low.
+
+## U1. PAC-tolerant prologue matcher (screen, sha256)
+
+- Location: `resolve.py` `screen_fns()`, `sha256_fn()`.
+- Missing: matcher that accepts `pacibsp`/`autibsp`-style prologues instead of
+  fixed non-PAC sequences. Current code falls back to hardcoded addresses.
+- Evidence: X510 wrapper reported at 0xf48645ec calling 0xf48bea04; November
+  sha256 resolved to 0xf4865a4c via fallback. Block wrappers (non-PAC) pass,
+  consistent with PAC explanation.
+- Status: PARTIAL (fallbacks present, not validated).
+- Next: implement PAC-aware prologue detection; validate against November image
+  and any additional build.
+
+## U2. comp_output (compressed output block)
+
+- Location: `resolve.py` `comp_output()`.
+- Missing: confirm that the EZJ2 fallback constants (OUT_BASE=0xc5000000,
+  BLOCK=0x100000) are the real output accumulator on November, not just
+  plausible constants. Upstream 10-instruction pattern absent on PAC builds.
+- Evidence: November returns (0xc5000000, 0x100000); resolve.py main() passes
+  structural validation (walk within range).
+- Status: PARTIAL.
+- Next: targeted disassembly around the CD worker to confirm accumulator base
+  and block size; cross-check with October if available.
+
+## U3. send_info (Odin setter/reply)
+
+- Location: `resolve.py` `send_info()`.
+- Missing: confirm reply/callback/default-send on November. Fallback uses
+  call-count heuristic (default send 0xf480f30c with 11+ callers) and a
+  calibrated reply (0xf4f1c9a8).
+- Evidence: November returns reply=0xf4f1c9a8, callback=0xf4f1c9b8,
+  send=0xf480f30c; structural checks pass (callback in BSS, cb_off=0x10).
+- Status: PARTIAL.
+- Next: map the Odin callback setter layout on November; verify reply buffer
+  derivation (currently issue-#13 calibration).
+
+## U4. blk shift
+
+- Location: `resolve.py` `io_shift()`.
+- Missing: qualifying `lsr`/shift pattern at blk_bread call sites. Fallback
+  returns 12 (per PIT geometry).
+- Evidence: November returns 12 (fallback path; no qualifying shift found).
+- Status: LOW confidence.
+- Next: inspect blk_bread call sites; determine whether shift is genuinely 12
+  on November or whether the pattern is obfuscated.
+
+## U5. screen cursor / display update
+
+- Location: `resolve.py` `screen_fns()`.
+- Missing: validated cursor and display-update addresses. Fallbacks are
+  unverified (0xf48168e8, 0xf4801e54).
+- Evidence: none beyond fallback.
+- Status: UNCONFIRMED.
+- Next: disassembly of screen_printf callers; identify cursor getter and
+  display update on November.
+
+## U6. October vs November direct diff
+
+- Location: docs/a35-firmware-comparison.md.
+- Missing: October A35 binary (A356EXXSBDZH1) locally. Comparison is
+  documentary only.
+- Evidence: October values from Yuki docs.
+- Status: BLOCKED on input.
+- Next: obtain and hash-verify the October build; run firmware_compare.py.
+
+## U7. A53 regression (s5e8825)
+
+- Location: resolve.py patch (slot[2] == 9 guard).
+- Missing: re-run on an s5e8825 image to confirm the guard still preserves
+  `base=0xf8800000 in=0x890010000 ...`. No s5e8825 firmware in this workspace.
+- Evidence: Yuki docs report it green.
+- Status: UNCONFIRMED in this fork (no input).
+- Next: obtain an s5e8825 BL package; run resolve.py and compare to ground truth.
+
+## U8. November-or-later diff for heuristics
+
+- Location: README "Remaining work".
+- Missing: any build newer than November 2026 to see which function the vendor
+  changed. Only one November build is available.
+- Status: OPEN.
+- Next: collect additional builds; rerun resolver_analysis; diff slices.
+
+## U9. BL signing profile for s5e8835
+
+- Location: `s5e8835.json`, `android-resigner/config/s5e8835.json` (in original
+  SVE project) — not in this fork.
+- Missing: image offsets re-derived from A35 BL tar for real signing. Copied
+  from s5e8825 template.
+- Status: OUT OF SCOPE for this fork (no signing/redistribution here).
+- Note: this fork does not contain signing code or firmware.
+
+## U10. Synthetic coverage
+
+- Location: tests/.
+- Status: basic tests present; more fixtures needed for resolver heuristics.
+- Next: add synthetic LK slices exercising image_map edge cases and
+  bss_candidates false positives.
