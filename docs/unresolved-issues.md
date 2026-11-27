@@ -18,14 +18,14 @@ Confidence labels: high / medium / low.
 ## U2. comp_output (compressed output block)
 
 - Location: `resolve.py` `comp_output()`.
-- Missing: confirm that the EZJ2 fallback constants (OUT_BASE=0xc5000000,
-  BLOCK=0x100000) are the real output accumulator on November, not just
-  plausible constants. Upstream 10-instruction pattern absent on PAC builds.
-- Evidence: November returns (0xc5000000, 0x100000); resolve.py main() passes
-  structural validation (walk within range).
-- Status: PARTIAL.
-- Next: targeted disassembly around the CD worker to confirm accumulator base
-  and block size; cross-check with October if available.
+- OUT_BASE=0xc5000000: SUPPORTED — the `mov w8, #-0x3b000000` encoding
+  (0x52b8a008) occurs 3 times in the November LK (and October). The upstream
+  10-instruction pattern is absent on PAC builds, but the constant is present.
+- BLOCK=0x100000: FALLBACK — `mov w23, #0x100000` (0x52a002f7) occurs 0
+  times on November; the block size is not independently evidenced. It is
+  assumed from PIT geometry (0x100000) and structural validation passes.
+- Status: PARTIAL (out_base supported; block size assumed).
+- Next: locate the CD worker's block-size check on November to confirm 0x100000.
 
 ## U3. send_info (Odin setter/reply)
 
